@@ -16,7 +16,7 @@ Also, be sure to use the latest version, as security improvements are constantly
 
 ### Thread safety
 
-Any pre-built version of libnetcdf that you install - whether from a package manager or from a download page - is likely to not be thread-safe.
+Any pre-built version of `libnetcdf` that you install - whether from a package manager or from a download page - is likely to not be thread-safe.
 The same is also true for versions you build from source.
 Therefore, netCDF-Java will only allow one thread to write via the netCDF-C libary at a time.
 This may result in a performance hit.
@@ -28,19 +28,19 @@ For TDS administrators, this can often happen in the NetCDF Subset Service (NCSS
 
 #### Pre-built
 
-The easiest way to get libnetcdf is through a package management program, such as rpm, yum, adept, and others.
+The easiest way to get `libnetcdf` is through a package management program, such as rpm, yum, adept, and others.
 Details will vary with each program but "netcdf" is usually the package name you want.
 
 #### Build from source
 
-Instructions for how to build libnetcdf from source can be [found here](https://www.unidata.ucar.edu/software/netcdf/docs/netCDF-CMake.html){:target="_blank"}.
+Instructions for how to build `libnetcdf` from source can be [found here](https://www.unidata.ucar.edu/software/netcdf/docs/netCDF-CMake.html){:target="_blank"}.
 
 ### Mac
 
 #### Pre-built
 
 As with Linux, a package manager is usually the easiest option.
-libnetcdf is known to be available both from [Homebrew](https://brew.sh/){:target="_blank"} and [MacPorts](https://www.macports.org/){:target="_blank"}.
+`libnetcdf` is known to be available both from [Homebrew](https://brew.sh/){:target="_blank"} and [MacPorts](https://www.macports.org/){:target="_blank"}.
 \"netcdf\" is usually the package name you want.
 
 #### Build from source
@@ -55,11 +55,11 @@ Pre-built binaries are [available here](https://www.unidata.ucar.edu/software/ne
 
 #### Build from source
 
-Instructions for how to build libnetcdf from source can be [found here](https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html#netCDF-CMake){:target="_blank"}.
+Instructions for how to build `libnetcdf` from source can be [found here](https://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html#netCDF-CMake){:target="_blank"}.
 
 ## Loading
 
-In order to use libnetcdf, the CDM must know its location, as well as the location(s) of its dependencies.
+In order to use `libnetcdf`, the CDM must know its location, as well as the location(s) of its dependencies.
 These binaries will have different extensions depending on your platform:
 
 * On Linux, they will be .SO files.
@@ -99,13 +99,13 @@ Therefore, it may not be necessary to set `DYLD_LIBRARY_PATH` at all.
 #### Windows
 
 The system library path maps to the `PATH` environment variable.
-To find libnetcdf and its dependencies, you’ll want to add `$NC4_INSTALL_DIR/bin`, `$NC4_INSTALL_DIR/deps/$ARCH/bin`, and `$NC4_INSTALL_DIR/deps/$ARCH/lib` to the `PATH` variable.
-`NC4_INSTALL_DIR` is the location where you installed libnetcdf and `ARCH` is its architecture (either \"w32\" or \"x64\").
+To find `libnetcdf`and its dependencies, you’ll want to add `$NC4_INSTALL_DIR/bin`, `$NC4_INSTALL_DIR/deps/$ARCH/bin`, and `$NC4_INSTALL_DIR/deps/$ARCH/lib` to the `PATH` variable.
+`NC4_INSTALL_DIR` is the location where you installed `libnetcdf` and `ARCH` is its architecture (either \"w32\" or \"x64\").
 
 ### Alternate methods
 
 The following alternatives are Java- and/or CDM-specific.
-To use these, it’s required that libnetcdf and all of its dependencies live in the same directory.
+To use these, it’s required that `libnetcdf` and all of its dependencies live in the same directory.
 So, if that is not the case in your current configuration, you must manually copy them all to the same place.
 This is a particular issue on Windows, because the libraries are installed in separate locations by default.
 
@@ -145,11 +145,11 @@ Make sure that you don’t have an old version of `libhdf5` in your system libra
 
 ## Writing NetCDF-4 files
 
-* From the command line: see [nccopy man page](cdm_utility_programs.html)
+* From the command line: see [nccopy main page](cdm_utility_programs.html)
 * From ToolsUI: in Viewer tab, bring up the file to copy, then click \"Write netCDF file\" button to get dialog.
 * From TDS NetCDF Subset Service: choose netcdf-4 output type.
 * From a Java program (see `ucar.nc2.dataset.NetcdfDataset.main()` for complete example):
-  ~~~java
+~~~java
   Nc4Chunking chunker = Nc4Chunking factory(Strategy type, int deflateLevel, boolean shuffle);
   NetcdfFileWriter.Version version = NetcdfFileWriter.Version.netcdf4;
 
@@ -158,7 +158,7 @@ Make sure that you don’t have an old version of `libhdf5` in your system libra
   NetcdfFile ncfileOut = writer.write();
   ncfileIn.close();
   ncfileOut.close();
-  ~~
+  ~~~
 
 ### Chunking Strategy (version 4.5)
 

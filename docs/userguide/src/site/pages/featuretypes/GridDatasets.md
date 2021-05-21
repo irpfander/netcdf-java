@@ -5,12 +5,12 @@ sidebar: userguide_sidebar
 toc: false
 permalink: grid_datasets.html
 ---
-## Tutorial: The Grid Feature Type
+## The Grid Feature Type
 
 ### Scientific Feature Types
-The Common Data Model (CDM) Scientific Feature Type layer adds another layer of functionality on top of NetcdfDataset, by specializing in various kinds of data that are common in earth science. The abstract concepts and concrete classes are continually evolving, and we have concentrated on, for obvious reasons, the types of datasets and data that Unidata is most familiar with, mainly from the atmospheric and ocean sciences.
+The Common Data Model (CDM) Scientific Feature Type layer adds another layer of functionality on top of `NetcdfDataset`, by specializing in various kinds of data that are common in Earth science. The abstract concepts and concrete classes are continually evolving, and we have concentrated on, for obvious reasons, the types of datasets and data that Unidata is most familiar with, mainly from the atmospheric and ocean sciences.
 
-All Scientific Feature Types have georeferencing coordinate systems, from which a location in real physical space and time can be found, usually with reference to the Earth. Each adds special data subsetting methods which cannot be done efficiently or at all in the general case of NetcdfDataset objects.
+All Scientific Feature Types have georeferencing coordinate systems, from which a location in real physical space and time can be found, usually with reference to the Earth. Each adds special data subsetting methods which cannot be done efficiently or at all in the general case of `NetcdfDataset` objects.
 
 Also see overview of Scientific Feature Types.
 
