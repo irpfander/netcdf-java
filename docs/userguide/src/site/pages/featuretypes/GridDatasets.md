@@ -12,9 +12,10 @@ The Common Data Model (CDM) Scientific Feature Type layer adds another layer of 
 
 All Scientific Feature Types have georeferencing coordinate systems, from which a location in real physical space and time can be found, usually with reference to the Earth. Each adds special data subsetting methods which cannot be done efficiently or at all in the general case of `NetcdfDataset` objects.
 
-Also see overview of Scientific Feature Types.
+Also see overview of 
+[Scientific Feature Types.](https://www.unidata.ucar.edu/software/netcdf-java/v4.6/reference/FeatureDatasets/Overview.html){:target="_blank"}
 
-The Grid Feature Type
+#### The Grid Feature Type
 A Grid Coordinate System at a minimum has a Lat and Lon coordinate axis, or a GeoX and GeoY coordinate axis plus a Projection that maps x, y to lat, lon. It usually has a time coordinate axis. It may optionally have a vertical coordinate axis, classified as Height, Pressure, or GeoZ. If it is a GeoZ axis, it may have a Vertical Transform that maps GeoZ to height or pressure. A Grid may also optionally have a Runtime and/or Ensemble coordinate axis.
 
 A GridDatatype (aka GeoGrid or just Grid) has a Grid Coordinate System, whose dimensions are all connected, meaning that neighbors in index space are connected neighbors in coordinate space. This means that data values that are close to each other in the real world (coordinate space) are close to each other in the data array, and are usually stored close to each other on disk, making coordinate subsetting easy and efficient.
@@ -25,112 +26,59 @@ A Grid Dataset has Grids that are grouped into Gridsets based on common Grid Coo
 
 ### Opening a GridDataset
 
-The most general way to open a <b>_GridDataset_</b> is to use the <b>_FeatureDatasetFactoryManager_</b> class. This allows third parties to plug-in alternative implementations of <b>_GridDataset_</b> at runtime. For example:
-~~~
-  Formatter errlog = new Formatter();
-  FeatureDataset fdataset = FeatureDatasetFactoryManager.open(FeatureType.GRID, location, null, errlog);
-  if (fdataset == null) {
-    log.error("**failed on {} %n --> {} %n", location, errlog);
-    return null;
-  }
+The most general way to open a `GridDataset` is to use the `FeatureDatasetFactoryManager` class. This allows third parties to plug-in alternative implementations of `GridDataset` at runtime. The `wantFeatureType` parameter is checked, logging an error if incompatible. For example:
+{% capture rmd %}
+{% includecodeblock netcdf-java&docs/userguide/src/test/java/examples/CoverageFeatures/GridDatasetsTutorial.java&gridDatasetFormat %}
+{% endcapture %}
+{{ rmd | markdownify }}
 
-  FeatureType ftype = fdataset.getFeatureType();
-  assert (ftype == FeatureType.GRID);
-  GridDataset gds = (GridDataset) fdataset;
-~~~
   
-If you know that the file you are opening is a GridDataset, you can call directly:
-~~~
-       GridDataset gds = ucar.nc2.dt.grid.GridDataset.open(location);
-~~~
+If you know that the file you are opening is a `GridDataset`, you can call directly:
+{% capture rmd %}
+{% includecodeblock netcdf-java&docs/userguide/src/test/java/examples/CoverageFeatures/GridDatasetsTutorial.java&gridFormat %}
+{% endcapture %}
+{{ rmd | markdownify }}
 
 ### Using a GridDataset
 
-Once you have a GridDataset, you can get the grids and their associated coordinate systems:
+Once you have a `GridDataset`, you can get the grids and their associated coordinate systems:
 
-~~~
-  GridDatatype grid = gds.findGridDatatype( args[1]);
-  GridCoordSystem gcs = grid.getCoordinateSystem();
-  CoordinateAxis xAxis = gcs.getXHorizAxis();
-  CoordinateAxis yAxis = gcs.getYHorizAxis();
-  CoordinateAxis1D zAxis = gcs.getVerticalAxis(); // may be null
-
-  if (gcs.hasTimeAxis1D()) {
-    CoordinateAxis1DTime tAxis1D = gcs.getTimeAxis1D();
-    java.util.Date[] dates = tAxis1D.getTimeDates();
-
-  } else if (gcs.hasTimeAxis()) {
-    CoordinateAxis tAxis = gcs.getTimeAxis();
-  } 
-  ... 
-~~~
+{% capture rmd %}
+{% includecodeblock netcdf-java&docs/userguide/src/test/java/examples/CoverageFeatures/GridDatasetsTutorial.java&usingGridDataset %}
+{% endcapture %}
+{{ rmd | markdownify }}
  
-A <b>_GridCoordSystem_</b> wraps a georeferencing coordinate system. It always has 1D or 2D XHoriz and YHoriz axes, and optionally 1D vertical and 1D or 2D time axes. The XHoriz/YHoriz axes will be lat/lon if isLatLon() is true, otherwise they will be GeoX,GeoY with an appropriate Projection. The getBoundingBox() method returns a bounding box from the XHoriz/YHoriz corner points. The getLatLonBoundingBox() method returns the smallest lat/lon bounding box that contains getBoundingBox().
+A `GridCoordinateSystem` wraps a georeferencing coordinate system. It always has 1D or 2D XHoriz and YHoriz axes, and optionally 1D vertical and 1D or 2D time axes. The XHoriz/YHoriz axes will be lat/lon if `isLatLon()` is true, otherwise they will be GeoX,GeoY with an appropriate Projection. The `getBoundingBox()` method returns a bounding box from the XHoriz/YHoriz corner points. The `getLatLonBoundingBox()` method returns the smallest lat/lon bounding box that contains `getBoundingBox()`.
 
-You can use the <b>_GridCoordSystem_</b> to find the value of a grid at a specific lat, lon point:
-
-~~~
-  // open the dataset, find the variable and its coordinate system
-  GridDataset gds = ucar.nc2.dt.grid.GridDataset.open(location);
-  GridDatatype grid = gds.findGridDatatype( "myVariableName");
-  GridCoordSystem gcs = grid.getCoordinateSystem();
-
-  double lat = 8.0;
-  double lon = 21.0;
-
-  // find the x,y index for a specific lat/lon position
-  int[] xy = gcs.findXYindexFromLatLon(lat, lon, null); // xy[0] = x, xy[1] = y
-
-  // read the data at that lat, lon and the first time and z level (if any) 
-  Array data  = grid.readDataSlice(0, 0, xy[1], xy[0]); // note order is t, z, y, x
-  double val = data.getDouble(0); // we know its a scalar
-  System.out.printf("Value at %f %f == %f%n", lat, lon, val);
-  ... 
-~~~
+You can use the `GridCoordinateSystem` to find the value of a grid at a specific lat, lon point:
+{% capture rmd %}
+{% includecodeblock netcdf-java&docs/userguide/src/test/java/examples/CoverageFeatures/GridDatasetsTutorial.java&findLatLonVal %}
+{% endcapture %}
+{{ rmd | markdownify }}
    
-Most GridCoordSystems have a CoordinateAxis1DTime time coordinate. If so, you can get the list of dates from it.
+Most `GridCoordSystems` have a `CoordinateAxis1DTime` time coordinate. If so, you can get the list of dates from it by calling `getCalendarDates()`.
 
-A <b>_GridDatatype_</b> is like a specialized Variable that explicitly handles X,Y,Z,T dimensions, which are put into canonical order: (t, z, y, x). It has various convenience routines that expose methods from the GridCoordSystem and VariableDS objects. The main data access method is readDataSlice,  where you can fix an index on any Dimension, or use a -1 to get all the data in that Dimension.
+A `GridDatatype` is like a specialized Variable that explicitly handles X,Y,Z,T dimensions, which are put into canonical order: (t, z, y, x). It has various convenience routines that expose methods from the `GridCoordinateSystem` and `VariableDS` objects. The main data access method is `readData`,  where you can read a specified subset of data, and return the result as a Georeferenced Array.
 
-~~~
-// get 2D data at timeIndex, levelIndex
-Array data = grid.readDataSlice(timeIndex, levelIndex, -1, -1);
-~~~
+{% capture rmd %}
+{% includecodeblock netcdf-java&docs/userguide/src/test/java/examples/CoverageFeatures/GridDatasetsTutorial.java&readingData %}
+{% endcapture %}
+{{ rmd | markdownify }}
 
-The subset method allows you to create a logical subset of a GeoGrid using index Ranges.
-~~~
-GridDatatype subset = grid.makeSubset(rt_range, ens_range, null, t_range, z_range, y_range, x_range);
-~~~
+The `GridSubset` class allows you to create a coordinate value-based subset of a `Grid`.
+{% capture rmd %}
+{% includecodeblock netcdf-java&docs/userguide/src/test/java/examples/CoverageFeatures/GridDatasetsTutorial.java&CallMakeSubset %}
+{% endcapture %}
+{{ rmd | markdownify }}
 
 ### Writing a GridDataset to a Netcdf-3 file using CF-1.0 Conventions
 
-Once you have a GridDataset, you can write it as a Netcdf-3 file using the <a href="http://cfconventions.org/" target="_blank">CF Conventions</a>, using <b>_ucar.nc2.dt.grid.NetcdfCFWriter_</b>.
+Once you have a `GridDataset`, you can write it as a Netcdf-3 file using the <a href="http://cfconventions.org/" target="_blank">CF Conventions</a>, using `ucar.nc2.write.NetcdfFormatWriter`.
 
-~~~
-      NetcdfCFWriter writer = new NetcdfCFWriter();
-      writer.makeFile(filename, gds, gridList, boundingBox, timeRange, addLatLon, horizStride, vertStride, timeStride);
-
-  /**
-   * Write a CF compliant Netcdf-3 file from any gridded dataset.
-   *
-   * @param location    write to this location on disk
-   * @param gds         A gridded dataset
-   * @param gridList    the list of grid names to be written, must not be empty. Full name (not short).
-   * @param llbb        optional lat/lon bounding box
-   * @param range       optional time range
-   * @param addLatLon   should 2D lat/lon variables be added, if its a projection coordainte system?
-   * @param horizStride x,y stride
-   * @param stride_z    not implemented yet
-   * @param stride_time not implemented yet
-   * @throws IOException           if write or read error
-   * @throws InvalidRangeException if subset is illegal
-   */
-  public void makeFile(String location, ucar.nc2.dt.GridDataset gds, List<String> gridList,
-          LatLonRect llbb, DateRange range,
-          boolean addLatLon,
-          int horizStride, int stride_z, int stride_time)
-          throws IOException, InvalidRangeException;
-~~~
+{% capture rmd %}
+{% includecodeblock netcdf-java&docs/userguide/src/test/java/examples/CoverageFeatures/GridDatasetsTutorial.java&writeFile %}
+{% endcapture %}
+{{ rmd | markdownify }}
           
 ### Using ToolsUI to look at Grids
 
