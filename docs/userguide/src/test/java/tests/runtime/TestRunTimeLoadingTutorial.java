@@ -19,10 +19,7 @@ public class TestRunTimeLoadingTutorial {
 
     @Test
     public void testFeatureDatasetFactoryRegister() {
-        // test open success
-        Assert.assertThrows(ClassNotFoundException.class, () -> {
-            RunTimeLoadingTutorial.FeatureDatasetFactoryRegister(null,"classname");
-        });
+        RunTimeLoadingTutorial.FeatureDatasetFactoryRegister(null,"classname");
     }
 
 }

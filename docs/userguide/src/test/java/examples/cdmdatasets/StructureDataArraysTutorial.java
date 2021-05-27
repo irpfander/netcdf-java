@@ -10,7 +10,7 @@ public class StructureDataArraysTutorial {
 
     public static void createArrayStructure (Structure s){
         // create the ArrayStructure
-        ucar.ma2.StructureMembers members = s.makeStructureMembers();
+        /*ucar.ma2.StructureMembers members = s.makeStructureMembers();
         for (StructureMembers.Member m : members.getMembers()) {
             Variable v2 = s.findVariable(m.getName());
             N3header.Vinfo vinfo = (N3header.Vinfo) v2.getSPobject();
@@ -28,7 +28,7 @@ public class StructureDataArraysTutorial {
             raf.seek(recStart + recnum * recsize); // where the record starts
             raf.readFully(result, count * recsize, recsize);
             count++;
-        }
+        }*/
 
     }
 }
